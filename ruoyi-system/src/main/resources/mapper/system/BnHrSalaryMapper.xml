@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.salary.mapper.BnHrSalaryMapper">
+    
+    <resultMap type="BnHrSalary" id="BnHrSalaryResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="card"    column="card"    />
+        <result property="bankCard"    column="bank_card"    />
+        <result property="bankName"    column="bank_name"    />
+        <result property="bankLine"    column="bank_line"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="cqDays"    column="cq_days"    />
+        <result property="gwSal"    column="gw_sal"    />
+        <result property="bzjx"    column="bzjx"    />
+        <result property="jxSal"    column="jx_sal"    />
+        <result property="cqSal"    column="cq_sal"    />
+        <result property="yearSal"    column="year_sal"    />
+        <result property="kq"    column="kq"    />
+        <result property="glbz"    column="glbz"    />
+        <result property="zcbt"    column="zcbt"    />
+        <result property="xlbt"    column="xlbt"    />
+        <result property="bjf"    column="bjf"    />
+        <result property="ycbz"    column="ycbz"    />
+        <result property="gwbt"    column="gwbt"    />
+        <result property="jtbt"    column="jtbt"    />
+        <result property="qtbt"    column="qtbt"    />
+        <result property="sfbt"    column="sfbt"    />
+        <result property="yfgz"    column="yfgz"    />
+        <result property="ylbx"    column="ylbx"    />
+        <result property="ylbx2"    column="ylbx2"    />
+        <result property="sybx"    column="sybx"    />
+        <result property="zfgjj"    column="zfgjj"    />
+        <result property="gs"    column="gs"    />
+        <result property="fk"    column="fk"    />
+        <result property="qtkk"    column="qtkk"    />
+        <result property="sfgz"    column="sfgz"    />
+        <result property="lkSign"    column="lk_sign"    />
+        <result property="company"    column="company"    />
+        <result property="department"    column="department"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateDate"    column="update_date"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="isDel"    column="is_del"    />
+        <result property="checkNum"    column="check_num"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectBnHrSalaryVo">
+        select id, name, card, bank_card, bank_name, bank_line, dept_name, dept_id, cq_days, gw_sal, bzjx, jx_sal, cq_sal, year_sal, kq, glbz, zcbt, xlbt, bjf, ycbz, gwbt, jtbt, qtbt, sfbt, yfgz, ylbx, ylbx2, sybx, zfgjj, gs, fk, qtkk, sfgz, lk_sign, company, department, create_date, create_by, update_date, update_by, is_del, check_num, remark from bn_hr_salary
+    </sql>
+
+    <select id="selectBnHrSalaryList" parameterType="BnHrSalary" resultMap="BnHrSalaryResult">
+        <include refid="selectBnHrSalaryVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="card != null  and card != ''"> and card like concat('%', #{card}, '%')</if>
+            <if test="deptName != null  and deptName != ''"> and dept_name like concat('%', #{deptName}, '%')</if>
+            <if test="company != null  and company != ''"> and company like concat('%', #{company}, '%')</if>
+            <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
+            <if test="createDate != null "> and create_date = #{createDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectBnHrSalaryById" parameterType="Long" resultMap="BnHrSalaryResult">
+        <include refid="selectBnHrSalaryVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBnHrSalary" parameterType="BnHrSalary" useGeneratedKeys="true" keyProperty="id">
+        insert into bn_hr_salary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="card != null">card,</if>
+            <if test="bankCard != null">bank_card,</if>
+            <if test="bankName != null">bank_name,</if>
+            <if test="bankLine != null">bank_line,</if>
+            <if test="deptName != null">dept_name,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="cqDays != null">cq_days,</if>
+            <if test="gwSal != null">gw_sal,</if>
+            <if test="bzjx != null">bzjx,</if>
+            <if test="jxSal != null">jx_sal,</if>
+            <if test="cqSal != null">cq_sal,</if>
+            <if test="yearSal != null">year_sal,</if>
+            <if test="kq != null">kq,</if>
+            <if test="glbz != null">glbz,</if>
+            <if test="zcbt != null">zcbt,</if>
+            <if test="xlbt != null">xlbt,</if>
+            <if test="bjf != null">bjf,</if>
+            <if test="ycbz != null">ycbz,</if>
+            <if test="gwbt != null">gwbt,</if>
+            <if test="jtbt != null">jtbt,</if>
+            <if test="qtbt != null">qtbt,</if>
+            <if test="sfbt != null">sfbt,</if>
+            <if test="yfgz != null">yfgz,</if>
+            <if test="ylbx != null">ylbx,</if>
+            <if test="ylbx2 != null">ylbx2,</if>
+            <if test="sybx != null">sybx,</if>
+            <if test="zfgjj != null">zfgjj,</if>
+            <if test="gs != null">gs,</if>
+            <if test="fk != null">fk,</if>
+            <if test="qtkk != null">qtkk,</if>
+            <if test="sfgz != null">sfgz,</if>
+            <if test="lkSign != null">lk_sign,</if>
+            <if test="company != null">company,</if>
+            <if test="department != null">department,</if>
+            <if test="createDate != null">create_date,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateDate != null">update_date,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="isDel != null">is_del,</if>
+            <if test="checkNum != null">check_num,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="card != null">#{card},</if>
+            <if test="bankCard != null">#{bankCard},</if>
+            <if test="bankName != null">#{bankName},</if>
+            <if test="bankLine != null">#{bankLine},</if>
+            <if test="deptName != null">#{deptName},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="cqDays != null">#{cqDays},</if>
+            <if test="gwSal != null">#{gwSal},</if>
+            <if test="bzjx != null">#{bzjx},</if>
+            <if test="jxSal != null">#{jxSal},</if>
+            <if test="cqSal != null">#{cqSal},</if>
+            <if test="yearSal != null">#{yearSal},</if>
+            <if test="kq != null">#{kq},</if>
+            <if test="glbz != null">#{glbz},</if>
+            <if test="zcbt != null">#{zcbt},</if>
+            <if test="xlbt != null">#{xlbt},</if>
+            <if test="bjf != null">#{bjf},</if>
+            <if test="ycbz != null">#{ycbz},</if>
+            <if test="gwbt != null">#{gwbt},</if>
+            <if test="jtbt != null">#{jtbt},</if>
+            <if test="qtbt != null">#{qtbt},</if>
+            <if test="sfbt != null">#{sfbt},</if>
+            <if test="yfgz != null">#{yfgz},</if>
+            <if test="ylbx != null">#{ylbx},</if>
+            <if test="ylbx2 != null">#{ylbx2},</if>
+            <if test="sybx != null">#{sybx},</if>
+            <if test="zfgjj != null">#{zfgjj},</if>
+            <if test="gs != null">#{gs},</if>
+            <if test="fk != null">#{fk},</if>
+            <if test="qtkk != null">#{qtkk},</if>
+            <if test="sfgz != null">#{sfgz},</if>
+            <if test="lkSign != null">#{lkSign},</if>
+            <if test="company != null">#{company},</if>
+            <if test="department != null">#{department},</if>
+            <if test="createDate != null">#{createDate},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateDate != null">#{updateDate},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="isDel != null">#{isDel},</if>
+            <if test="checkNum != null">#{checkNum},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBnHrSalary" parameterType="BnHrSalary">
+        update bn_hr_salary
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="card != null">card = #{card},</if>
+            <if test="bankCard != null">bank_card = #{bankCard},</if>
+            <if test="bankName != null">bank_name = #{bankName},</if>
+            <if test="bankLine != null">bank_line = #{bankLine},</if>
+            <if test="deptName != null">dept_name = #{deptName},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="cqDays != null">cq_days = #{cqDays},</if>
+            <if test="gwSal != null">gw_sal = #{gwSal},</if>
+            <if test="bzjx != null">bzjx = #{bzjx},</if>
+            <if test="jxSal != null">jx_sal = #{jxSal},</if>
+            <if test="cqSal != null">cq_sal = #{cqSal},</if>
+            <if test="yearSal != null">year_sal = #{yearSal},</if>
+            <if test="kq != null">kq = #{kq},</if>
+            <if test="glbz != null">glbz = #{glbz},</if>
+            <if test="zcbt != null">zcbt = #{zcbt},</if>
+            <if test="xlbt != null">xlbt = #{xlbt},</if>
+            <if test="bjf != null">bjf = #{bjf},</if>
+            <if test="ycbz != null">ycbz = #{ycbz},</if>
+            <if test="gwbt != null">gwbt = #{gwbt},</if>
+            <if test="jtbt != null">jtbt = #{jtbt},</if>
+            <if test="qtbt != null">qtbt = #{qtbt},</if>
+            <if test="sfbt != null">sfbt = #{sfbt},</if>
+            <if test="yfgz != null">yfgz = #{yfgz},</if>
+            <if test="ylbx != null">ylbx = #{ylbx},</if>
+            <if test="ylbx2 != null">ylbx2 = #{ylbx2},</if>
+            <if test="sybx != null">sybx = #{sybx},</if>
+            <if test="zfgjj != null">zfgjj = #{zfgjj},</if>
+            <if test="gs != null">gs = #{gs},</if>
+            <if test="fk != null">fk = #{fk},</if>
+            <if test="qtkk != null">qtkk = #{qtkk},</if>
+            <if test="sfgz != null">sfgz = #{sfgz},</if>
+            <if test="lkSign != null">lk_sign = #{lkSign},</if>
+            <if test="company != null">company = #{company},</if>
+            <if test="department != null">department = #{department},</if>
+            <if test="createDate != null">create_date = #{createDate},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateDate != null">update_date = #{updateDate},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="isDel != null">is_del = #{isDel},</if>
+            <if test="checkNum != null">check_num = #{checkNum},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBnHrSalaryById" parameterType="Long">
+        delete from bn_hr_salary where id = #{id}
+    </delete>
+
+    <delete id="deleteBnHrSalaryByIds" parameterType="String">
+        delete from bn_hr_salary where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

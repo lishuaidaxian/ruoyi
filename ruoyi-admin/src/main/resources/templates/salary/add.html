@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增人力资源工资统计')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-salary-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">姓名：</label>
+                <div class="col-sm-8">
+                    <input name="name" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">身份证号：</label>
+                <div class="col-sm-8">
+                    <input name="card" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">出勤天数：</label>
+                <div class="col-sm-8">
+                    <input name="cqDays" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">岗位工资：</label>
+                <div class="col-sm-8">
+                    <input name="gwSal" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">标准绩效：</label>
+                <div class="col-sm-8">
+                    <input name="bzjx" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">绩效工资：</label>
+                <div class="col-sm-8">
+                    <input name="jxSal" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">出勤工资：</label>
+                <div class="col-sm-8">
+                    <input name="cqSal" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">年终奖：</label>
+                <div class="col-sm-8">
+                    <input name="yearSal" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">扣款：</label>
+                <div class="col-sm-8">
+                    <input name="kq" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">工龄补助：</label>
+                <div class="col-sm-8">
+                    <input name="glbz" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">职称补贴：</label>
+                <div class="col-sm-8">
+                    <input name="zcbt" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">学历补贴：</label>
+                <div class="col-sm-8">
+                    <input name="xlbt" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">保健费：</label>
+                <div class="col-sm-8">
+                    <input name="bjf" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">夜餐补助：</label>
+                <div class="col-sm-8">
+                    <input name="ycbz" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">实发补贴：</label>
+                <div class="col-sm-8">
+                    <input name="sfbt" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">应发工资：</label>
+                <div class="col-sm-8">
+                    <input name="yfgz" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">养老保险：</label>
+                <div class="col-sm-8">
+                    <input name="ylbx" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">医疗保险：</label>
+                <div class="col-sm-8">
+                    <input name="ylbx2" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">失业保险：</label>
+                <div class="col-sm-8">
+                    <input name="sybx" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">住房公积金：</label>
+                <div class="col-sm-8">
+                    <input name="zfgjj" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">个税：</label>
+                <div class="col-sm-8">
+                    <input name="gs" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">实发工资：</label>
+                <div class="col-sm-8">
+                    <input name="sfgz" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">领款人签字：</label>
+                <div class="col-sm-8">
+                    <input name="lkSign" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">公司：</label>
+                <div class="col-sm-8">
+                    <input name="company" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">车间：</label>
+                <div class="col-sm-8">
+                    <input name="department" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">录入时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="createDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">修改时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="updateDate" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="remark" class="form-control"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "salary";
+        $("#form-salary-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-salary-add').serialize());
+            }
+        }
+
+        $("input[name='createDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+
+        $("input[name='updateDate']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
+    </script>
+</body>
+</html>
