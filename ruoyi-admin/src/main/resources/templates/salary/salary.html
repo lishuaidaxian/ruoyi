@@ -35,6 +35,10 @@
                                 <label>录入时间：</label>
                                 <input type="text" class="time-input" placeholder="请选择录入时间" name="createDate"/>
                             </li>
+<!--                            <li>-->
+<!--                                <label>录入时间：</label>-->
+<!--                                <input type="text" class="time-input" placeholder="请选择录入时间" name="wwDate"/>-->
+<!--                            </li>-->
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
                                 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -287,6 +291,12 @@
     <form enctype="multipart/form-data" class="mt20 mb10">
         <div class="col-xs-offset-1">
             <input type="file" id="file" name="file"/>
+
+<!--            <li>-->
+<!--                <label>录入时间：</label>-->
+<!--                <input type="text" class="time-input" placeholder="请选择录入时间" name="toDate"/>-->
+<!--                <input type="text" style="width: 10rem;" th:value="${#dates.format(new java.util.Date(), 'yyyy-MM')}" name="toDate"/>-->
+<!--            </li>-->
 <!--            <div class="mt10 pt5">-->
 <!--                <input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据-->
 <!--                &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>-->

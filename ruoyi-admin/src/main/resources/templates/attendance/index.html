@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('人力资源考勤统计列表')" />
+    <th:block th:include="include :: bootstrap-editable-css" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+
+                            <li>
+                                <label>姓名：</label>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <label>部门名称：</label>
+                                <input type="text" name="deptName"/>
+                            </li>
+                            <li>
+                                <label>考勤日期：</label>
+                                <input type="text" id="createDate" placeholder="请选择考勤日期" name="createDate"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                    <a class="btn btn-success" onclick="insertRow()">
+                        <i class="fa fa-plus"></i> 新增行
+                    </a>
+                    <a class="btn btn-danger" onclick="removeRow()">
+                        <i class="fa fa-remove"></i> 删除选择行
+                    </a>
+                    <a class="btn btn-danger" onclick="removeMonth()" shiro:hasPermission="attendance:index:remove">
+                        <i class="fa fa-remove"></i> 删除月份
+                    </a>
+                    <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="attendance:index:import">
+                        <i class="fa fa-upload"></i> 导入
+                    </a>
+                    <a class="btn btn-warning" type="button" onclick="exportData();" shiro:hasPermission="attendance:index:export">
+                        <i class="fa fa-download"></i> 导出
+                    </a>
+<!--                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="salary:salary:add">-->
+<!--                    <i class="fa fa-plus"></i> 添加-->
+<!--                </a>-->
+<!--                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="salary:salary:edit">-->
+<!--                    <i class="fa fa-edit"></i> 修改-->
+<!--                </a>-->
+<!--                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="salary:salary:remove">-->
+<!--                    <i class="fa fa-remove"></i> 删除-->
+<!--                </a>-->
+<!--                <a class="btn btn-info" onclick="$.table.importExcel()">-->
+<!--                    <i class="fa fa-upload"></i> 导入-->
+<!--                </a>-->
+<!--                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="salary:salary:export">-->
+<!--                    <i class="fa fa-download"></i> 导出-->
+<!--                </a>-->
+<!--                <a class="btn btn-warning" type="button" href='/salary/export' >-->
+<!--                    <i class="fa fa-download"></i> 导出模板-->
+<!--                </a>-->
+<!--                <a class="btn btn-warning" type="button" onclick="exportData();" >-->
+<!--                    <i class="fa fa-download"></i> 导出-->
+<!--                </a>-->
+            </div>
+            <div class="col-sm-12 select-table table-striped table-responsive table-bordered">
+                <table id="bootstrap-table" style="white-space:nowrap"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+     <th:block th:include="include :: bootstrap-table-editable-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "attendance";
+
+
+        // var data=[{"dept":"合成技术部","name":"张三","1":"8","2":"4","hour":"40","day":"24"}]
+
+        $(function() {
+
+            layui.use('laydate', function () {
+                var com = layui.laydate;
+                $("#createDate").each(function (index, item) {
+                    var time = $(item);
+                    // 控制控件外观
+                    var type = time.attr("data-type") || 'month';
+                    // 控制回显格式
+                    var format = time.attr("data-format") || 'yyyy年M月';
+                    // 控制日期控件按钮
+                    var buttons = time.attr("data-btn") || 'clear|now|confirm', newBtnArr = [];
+                    // 日期控件选择完成后回调处理
+                    var callback = time.attr("data-callback") || {};
+                    if (buttons) {
+                        if (buttons.indexOf("|") > 0) {
+                            var btnArr = buttons.split("|"), btnLen = btnArr.length;
+                            for (var j = 0; j < btnLen; j++) {
+                                if ("clear" === btnArr[j] || "now" === btnArr[j] || "confirm" === btnArr[j]) {
+                                    newBtnArr.push(btnArr[j]);
+                                }
+                            }
+                        } else {
+                            if ("clear" === buttons || "now" === buttons || "confirm" === buttons) {
+                                newBtnArr.push(buttons);
+                            }
+                        }
+                    } else {
+                        newBtnArr = ['clear', 'now', 'confirm'];
+                    }
+                    com.render({
+                        elem: item,
+                        theme: 'molv',
+                        trigger: 'click',
+                        type: type,
+                        format: format,
+                        btns: newBtnArr,
+                        done: function (value, data) {
+                            if (typeof window[callback] != 'undefined'
+                                && window[callback] instanceof Function) {
+                                window[callback](value, data);
+                            }
+                        }
+                    });
+                });
+            });
+
+            var options = {
+                url: prefix + "/list",
+                exportUrl: prefix + "/exportData",
+                importUrl: prefix + "/importData",
+                modalName: "考勤统计",
+                // showSearch: false,
+                // showRefresh: false,
+                // showToggle: false,
+                // showColumns: true,
+                // showPageGo: true,
+                // data: data,
+                onEditableSave: onEditableSave,
+                sortName: "dept_name asc,id desc",
+                sortOrder: "",
+                // singleSelect: true,
+                columns:[
+
+                    [
+                        {
+                            "title": "山东滨农科技有限公司考勤表",
+                            "halign":"center",
+                            "align":"center",
+                            "colspan": 56
+                        }
+                    ],
+                    [
+                        {
+                            checkbox: true,
+                            colspan: 1,
+                            rowspan: 2,
+                        },{
+                            field: 'id',
+                            title: '',
+                            colspan: 1,
+                            rowspan: 2,
+                            visible: false
+                        },{
+                            field: 'createDate',
+                            title: "考勤日期",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2
+                        },{
+                            field: 'deptName',
+                            title: "部门",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2
+                        },
+                        {
+                            field: 'name',
+                            title: "姓名",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day1',
+                            title: "1",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day2',
+                            title: "2",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day3',
+                            title: "3",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day4',
+                            title: "4",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day5',
+                            title: "5",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day6',
+                            title: "6",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day7',
+                            title: "7",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day8',
+                            title: "8",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day9',
+                            title: "9",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day10',
+                            title: "10",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day11',
+                            title: "11",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day12',
+                            title: "12",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day13',
+                            title: "13",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day14',
+                            title: "14",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day15',
+                            title: "15",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day16',
+                            title: "16",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day17',
+                            title: "17",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day18',
+                            title: "18",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day19',
+                            title: "19",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day20',
+                            title: "20",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day21',
+                            title: "21",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day22',
+                            title: "22",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day23',
+                            title: "23",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day24',
+                            title: "24",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day25',
+                            title: "25",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day26',
+                            title: "26",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day27',
+                            title: "27",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day28',
+                            title: "28",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day29',
+                            title: "29",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day30',
+                            title: "30",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'day31',
+                            title: "31",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'hours',
+                            title: "出勤小时",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'days',
+                            title: "出勤天数",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            field: 'remark',
+                            title: "备注",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 1,
+                            rowspan: 2,
+                            editable: true
+                        },
+                        {
+                            title: "其中加班天数",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 2,
+                            rowspan: 1
+                        },
+                        {
+                            title: "其中日常加班",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 2,
+                            rowspan: 1
+                        },
+                        {
+                            title: "缺勤天数",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 8,
+                            rowspan: 1
+                        },
+                        {
+                            title: "违纪",
+                            valign:"middle",
+                            align:"center",
+                            colspan: 5,
+                            rowspan: 1
+                        }
+                    ],
+                    [
+                        {
+                            field: 'jrjb',
+                            title: '节日加班',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'jb',
+                            title: '加班',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'cbb',
+                            title: '长白班',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'cyb',
+                            title: '长夜班',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'tx',
+                            title: '调休',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'gs',
+                            title: '工伤',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'phj',
+                            title: '陪护假',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'hj',
+                            title: '婚假',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'cc',
+                            title: '出差',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'tqb',
+                            title: '探亲假',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'xb',
+                            title: '休班',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'sj',
+                            title: '丧假',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'kg',
+                            title: '旷工',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'cd',
+                            title: '迟到',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'zt',
+                            title: '早退',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'wjdk',
+                            title: '忘记打卡',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        },
+                        {
+                            field: 'bzdk',
+                            title: '不再打卡',
+                            valign:"middle",
+                            align:"center",
+                            editable: true
+                        }
+                    ]
+                ],
+            };
+            $.table.init(options);
+
+        });
+
+
+
+        function onEditableSave (field, row, rowIndex, oldValue, $el) {
+            // alert("字段名：" + field + "，当前值：" + row[field]  + "，旧值：" + oldValue + "，id：" +row.id);
+            var remark = row.remark;
+            console.log(remark);
+            if(!remark){
+                $.table.search();
+                // alert("请先填写备注");
+                $.modal.alertWarning("请先填写备注");
+                return;
+            }
+            var obj = {};
+            obj[field] = row[field];
+            obj["id"] = row.id;
+            $.ajax({
+                url: prefix + "/edit",
+                type: "post",
+                dataType: "json",
+                data: obj,
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍候...");
+                    $.modal.disable();
+                },
+                success: function(result) {
+                    if (typeof callback == "function") {
+                        callback(result);
+                    }
+                    $.operate.successCallback(result);
+                }})
+        }
+
+        /* 新增表格行 */
+        function insertRow(){
+            // var randomId = 100 + ~~(Math.random() * 100)
+            var rows = $("#bootstrap-table").bootstrapTable('getData')[0];
+            if(!rows){
+                return;
+            }
+            $.ajax({
+                url: prefix + "/add",
+                type: "post",
+                dataType: "json",
+                data: rows,
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍候...");
+                    $.modal.disable();
+                },
+                success: function(result) {
+                    if (typeof callback == "function") {
+                        callback(result);
+                    }
+                    $.operate.successCallback(result);
+                }})
+            $.table.search();
+        }
+
+        /* 删除指定表格行 */
+        function removeRow(){
+            var ids = $.table.selectColumns("id");
+            if (ids.length == 0) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            // $("#bootstrap-table").bootstrapTable('remove', {
+            //     field: 'id',
+            //     values: ids
+            // })
+
+            $.modal.confirm("确定删除选中数据吗？", function() {
+                $.ajax({
+                    url: prefix + "/remove",
+                    type: "post",
+                    dataType: "json",
+                    data: {ids: ids.join(',')},
+                    beforeSend: function () {
+                        $.modal.loading("正在处理中，请稍候...");
+                        $.modal.disable();
+                    },
+                    success: function(result) {
+                        if (typeof callback == "function") {
+                            callback(result);
+                        }
+                        $.operate.successCallback(result);
+                    }})
+                $.table.search();
+
+            });
+
+        }
+
+        /* 删除指定表格行 */
+        function removeMonth(){
+            var createDate = $("#createDate").val();
+            if (!createDate) {
+                $.modal.alertWarning("请选择考勤日期");
+                return;
+            }
+            // $("#bootstrap-table").bootstrapTable('remove', {
+            //     field: 'id',
+            //     values: ids
+            // })
+
+            $.modal.confirm("确定删除" + createDate + "考勤数据吗？", function() {
+                $.ajax({
+                    url: prefix + "/removeMonth",
+                    type: "post",
+                    dataType: "json",
+                    data: {createDate: createDate},
+                    beforeSend: function () {
+                        $.modal.loading("正在处理中，请稍候...");
+                        $.modal.disable();
+                },
+                success: function(result) {
+                    if (typeof callback == "function") {
+                        callback(result);
+                    }
+                    $.operate.successCallback(result);
+                }})
+                $.form.reset();
+
+            });
+        }
+
+        // function importExcel(formId, width, height) {
+        //     table.set();
+        //     var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
+        //     var _width = $.common.isEmpty(width) ? "400" : width;
+        //     var _height = $.common.isEmpty(height) ? "230" : height;
+        //     top.layer.open({
+        //         type: 1,
+        //         area: [_width + 'px', _height + 'px'],
+        //         fix: false,
+        //         //不固定
+        //         maxmin: true,
+        //         shade: 0.3,
+        //         title: '导入' + table.options.modalName + '数据',
+        //         content: $('#' + currentId).html(),
+        //         btn: ['<i class="fa fa-check"></i> 导入', '<i class="fa fa-remove"></i> 取消'],
+        //         // 弹层外区域关闭
+        //         shadeClose: true,
+        //         btn1: function(index, layero){
+        //             var file = layero.find('#file').val();
+        //             if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx'))){
+        //                 $.modal.msgWarning("请选择后缀为 “xls”或“xlsx”的文件。");
+        //                 return false;
+        //             }
+        //             var index = top.layer.load(2, {shade: false});
+        //             $.modal.disable();
+        //             var formData = new FormData(layero.find('form')[0]);
+        //             $.ajax({
+        //                 url: table.options.importUrl,
+        //                 data: formData,
+        //                 cache: false,
+        //                 contentType: false,
+        //                 processData: false,
+        //                 type: 'POST',
+        //                 success: function (result) {
+        //                     if (result.code == web_status.SUCCESS) {
+        //                         $.modal.close(index);
+        //                         $.modal.closeAll();
+        //                         $.modal.alertSuccess(result.msg);
+        //                         $.table.refresh();
+        //                     } else if (result.code == web_status.WARNING) {
+        //                         $.modal.close(index);
+        //                         $.modal.enable();
+        //                         $.modal.alertWarning(result.msg)
+        //                     } else {
+        //                         $.modal.close(index);
+        //                         $.modal.enable();
+        //                         $.modal.alertError(result.msg);
+        //                     }
+        //                 },
+        //                 complete: function () {
+        //                     layero.find('#file').val('');
+        //                 }
+        //             });
+        //         }
+        //     });
+        // }
+
+
+
+        function exportData(){
+            var createDate = $("#createDate").val();
+            if(!createDate){
+                $.modal.alertWarning("请选择考勤日期");
+                return;
+            }
+            window.location = ctx + "attendance/export?createDate="+createDate;
+            // var dataParam = $("#bootstrap-table").serializeArray();
+            // $.modal.loading("正在导出数据，请稍候...");
+            // $.post("/attendance/exportData", dataParam, function(result) {
+            //     if (result.code == web_status.SUCCESS) {
+            //         window.location.href = ctx + "common/download?fileName=" + encodeURI(result.msg) + "&delete=" + true;
+            //     } else if (result.code == web_status.WARNING) {
+            //         $.modal.alertWarning(result.msg)
+            //     } else {
+            //         $.modal.alertError(result.msg);
+            //     }
+            //     $.modal.closeLoading();
+            // });
+        }
+
+    </script>
+</body>
+<!-- 导入区域 -->
+<script id="importTpl" type="text/template">
+    <form enctype="multipart/form-data" class="mt20 mb10">
+        <div class="col-xs-offset-1">
+            <input type="file" id="file" name="file"/>
+<!--            <div class="mt10 pt5">-->
+<!--                <input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据-->
+<!--                &nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>-->
+<!--            </div>-->
+<!--            <font color="red" class="pull-left mt10">-->
+<!--                提示：仅允许导入“xls”或“xlsx”格式文件！-->
+<!--            </font>-->
+        </div>
+    </form>
+</script>
+</html>

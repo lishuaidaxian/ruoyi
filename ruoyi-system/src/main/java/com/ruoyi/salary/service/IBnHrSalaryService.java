@@ -59,5 +59,5 @@ public interface IBnHrSalaryService
      */
     public int deleteBnHrSalaryById(Long id);
 
-    String importBnHrSalary(List<BnHrSalary> bnHrSalaries);
+    String importBnHrSalary(List<BnHrSalary> bnHrSalaries, BnHrSalary bnHrSalary);
 }

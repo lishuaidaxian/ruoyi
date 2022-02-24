@@ -119,14 +119,14 @@ public class BnHrSalaryController extends BaseController
      */
     @PostMapping("/importData")
     @ResponseBody
-    public AjaxResult importData(MultipartFile file) throws Exception
+    public AjaxResult importData(MultipartFile file, BnHrSalary bnHrSalary) throws Exception
     {
 //        ExcelUtil<BnHrSalary> util = new ExcelUtil<BnHrSalary>(BnHrSalary.class);
 //        List<BnHrSalary> salaryList = util.importExcel(file.getInputStream());
         List<BnHrSalary> bnHrSalaries = ExcelUtils.readExcel(file);
         String message = "";
         try{
-            message = bnHrSalaryService.importBnHrSalary(bnHrSalaries);
+            message = bnHrSalaryService.importBnHrSalary(bnHrSalaries, bnHrSalary);
         }catch (Exception e){
             e.printStackTrace();
             message = e.getMessage();

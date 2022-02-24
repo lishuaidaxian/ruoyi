@@ -1,8 +1,13 @@
 package com.ruoyi.salary.service.impl;
 
+import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.ShiroUtils;
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -99,7 +104,7 @@ public class BnHrSalaryServiceImpl implements IBnHrSalaryService
 
     @Override
     @Transactional(rollbackFor = ServiceException.class)
-    public String importBnHrSalary(List<BnHrSalary> salaryList) {
+    public String importBnHrSalary(List<BnHrSalary> salaryList, BnHrSalary searchModel) {
         if (StringUtils.isNull(salaryList) || salaryList.size() == 0)
         {
             throw new ServiceException("导入用户数据不能为空！");
@@ -108,9 +113,21 @@ public class BnHrSalaryServiceImpl implements IBnHrSalaryService
         int failureNum = 0;
         StringBuilder successMsg = new StringBuilder();
         StringBuilder failureMsg = new StringBuilder();
+        Date date = new Date();
+        //获取当前登录用户
+        SysUser sysUser = ShiroUtils.getSysUser();
+        String userName = sysUser.getUserName();
+        //获取录入日期
+//        String toDate = searchModel.getToDate();
+        String toDate = DateUtils.parseDateToStr("yyyyMM", date);
         for (BnHrSalary bnHrSalary : salaryList)
         {
             try{
+                bnHrSalary.setCreateDate(date);
+                bnHrSalary.setCreateBy(userName);
+                bnHrSalary.setUpdateDate(date);
+                bnHrSalary.setUpdateBy(userName);
+                bnHrSalary.setToDate(toDate);
                 bnHrSalaryMapper.insertBnHrSalary(bnHrSalary);
                 successNum++;
             }catch (Exception e){

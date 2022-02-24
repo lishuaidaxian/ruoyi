@@ -161,6 +161,10 @@ public class BnHrSalary extends BaseEntity
     @Excel(name = "车间")
     private String department;
 
+    /** 录入日期 */
+    @Excel(name = "录入日期")
+    private String toDate;
+
     /** 录入时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "录入时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -534,6 +538,14 @@ public class BnHrSalary extends BaseEntity
     public Integer getCheckNum() 
     {
         return checkNum;
+    }
+
+    public String getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(String toDate) {
+        this.toDate = toDate;
     }
 
     @Override

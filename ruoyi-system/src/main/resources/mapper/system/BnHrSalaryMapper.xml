@@ -41,6 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="lkSign"    column="lk_sign"    />
         <result property="company"    column="company"    />
         <result property="department"    column="department"    />
+        <result property="toDate"    column="to_date"    />
         <result property="createDate"    column="create_date"    />
         <result property="createBy"    column="create_by"    />
         <result property="updateDate"    column="update_date"    />
@@ -51,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectBnHrSalaryVo">
-        select id, name, card, bank_card, bank_name, bank_line, dept_name, dept_id, cq_days, gw_sal, bzjx, jx_sal, cq_sal, year_sal, kq, glbz, zcbt, xlbt, bjf, ycbz, gwbt, jtbt, qtbt, sfbt, yfgz, ylbx, ylbx2, sybx, zfgjj, gs, fk, qtkk, sfgz, lk_sign, company, department, create_date, create_by, update_date, update_by, is_del, check_num, remark from bn_hr_salary
+        select id, name, card, bank_card, bank_name, bank_line, dept_name, dept_id, cq_days, gw_sal, bzjx, jx_sal, cq_sal, year_sal, kq, glbz, zcbt, xlbt, bjf, ycbz, gwbt, jtbt, qtbt, sfbt, yfgz, ylbx, ylbx2, sybx, zfgjj, gs, fk, qtkk, sfgz, lk_sign, company, department, to_date, create_date, create_by, update_date, update_by, is_del, check_num, remark from bn_hr_salary
     </sql>
 
     <select id="selectBnHrSalaryList" parameterType="BnHrSalary" resultMap="BnHrSalaryResult">
@@ -63,6 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="company != null  and company != ''"> and company like concat('%', #{company}, '%')</if>
             <if test="department != null  and department != ''"> and department like concat('%', #{department}, '%')</if>
             <if test="createDate != null "> and create_date = #{createDate}</if>
+            <if test="toDate != null  and toDate != ''"> and to_date = #{toDate}</if>
         </where>
     </select>
     
@@ -109,6 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="lkSign != null">lk_sign,</if>
             <if test="company != null">company,</if>
             <if test="department != null">department,</if>
+            <if test="toDate != null">to_date,</if>
             <if test="createDate != null">create_date,</if>
             <if test="createBy != null">create_by,</if>
             <if test="updateDate != null">update_date,</if>
@@ -153,6 +156,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="lkSign != null">#{lkSign},</if>
             <if test="company != null">#{company},</if>
             <if test="department != null">#{department},</if>
+            <if test="toDate != null">#{toDate},</if>
             <if test="createDate != null">#{createDate},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="updateDate != null">#{updateDate},</if>
