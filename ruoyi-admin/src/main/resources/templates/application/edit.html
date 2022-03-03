@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改入职申请')" />
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+    <style>
+        .form-group{
+            width: 40%;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-inline" id="form-application-edit" th:object="${bnHrApplication}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">姓名：</label>
+                <div class="col-sm-4">
+                    <input name="userName" th:field="*{userName}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">身份证：</label>
+                <div class="col-sm-4">
+                    <input name="idCard" th:field="*{idCard}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">民族：</label>
+                <div class="col-sm-4">
+                    <input name="national" th:field="*{national}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">个人电话：</label>
+                <div class="col-sm-4">
+                    <input name="phone" th:field="*{phone}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">常住地址：</label>
+                <div class="col-sm-4">
+                    <input name="address" th:field="*{address}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">籍贯：</label>
+                <div class="col-sm-4">
+                    <input name="nativePlace" th:field="*{nativePlace}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">政治面貌：</label>
+                <div class="col-sm-4">
+                    <!--                    <input name="politicalLandscape" class="form-control" type="text">-->
+                    <div class="input-group" style="width: 100%">
+                        <select name="politicalLandscape" class="form-control m-b" th:with="type=${@dict.getType('sys_zz_type')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" th:field="*{politicalLandscape}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">户口类型：</label>
+                <div class="col-sm-4">
+                    <!--                    <input name="politicalLandscape" class="form-control" type="text">-->
+                    <div class="input-group" style="width: 100%">
+                        <select name="accountType" class="form-control m-b" th:with="type=${@dict.getType('sys_hk_type')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" th:field="*{accountType}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">婚姻状况：</label>
+                <div class="col-sm-4">
+                    <!--                    <input name="politicalLandscape" class="form-control" type="text">-->
+                    <div class="input-group" style="width: 100%">
+                        <select name="maritalStatus" class="form-control m-b" th:with="type=${@dict.getType('sys_hy_type')}">
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" th:field="*{maritalStatus}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">紧急联系电话：</label>
+                <div class="col-sm-4">
+                    <input name="tel" th:field="*{tel}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">电子信箱：</label>
+                <div class="col-sm-4">
+                    <input name="email" th:field="*{email}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">最高学历毕业学校：</label>
+                <div class="col-sm-4">
+                    <input name="mostSchool" th:field="*{mostSchool}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">最高学历毕业时间：</label>
+                <div class="col-sm-4">
+                    <input name="mostDate" th:field="*{mostDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">最高学历专业：</label>
+                <div class="col-sm-4">
+                    <input name="mostPro" th:field="*{mostPro}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">最高学历：</label>
+                <div class="col-sm-4">
+                    <input name="mostRecord" th:field="*{mostRecord}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">第一学历毕业学校：</label>
+                <div class="col-sm-4">
+                    <input name="firstSchool" th:field="*{firstSchool}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">第一学历毕业时间：</label>
+                <div class="col-sm-4">
+                    <input name="firstDate" th:field="*{firstDate}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">第一学历专业：</label>
+                <div class="col-sm-4">
+                    <input name="firstPro" th:field="*{firstPro}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">第一学历：</label>
+                <div class="col-sm-4">
+                    <input name="firstRecord" th:field="*{firstRecord}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">个人简介：</label>
+                <div class="col-sm-4">
+                    <input name="personalProfile" th:field="*{personalProfile}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">推荐人：</label>
+                <div class="col-sm-4">
+                    <input name="referees" th:field="*{referees}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">对象身份证号：</label>
+                <div class="col-sm-4">
+                    <input name="secondCard" th:field="*{secondCard}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">对象姓名：</label>
+                <div class="col-sm-4">
+                    <input name="secondName" th:field="*{secondName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">对象电话：</label>
+                <div class="col-sm-4">
+                    <input name="secondPhone" th:field="*{secondPhone}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">对象工作单位：</label>
+                <div class="col-sm-4">
+                    <input name="secondUnits" th:field="*{secondUnits}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">父亲姓名：</label>
+                <div class="col-sm-4">
+                    <input name="fatherName" th:field="*{fatherName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">父亲身份证号或生日：</label>
+                <div class="col-sm-4">
+                    <input name="fatherCard" th:field="*{fatherCard}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">母亲姓名：</label>
+                <div class="col-sm-4">
+                    <input name="motherName" th:field="*{motherName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">母亲身份证号或生日：</label>
+                <div class="col-sm-4">
+                    <input name="motherCard" th:field="*{motherCard}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">子女名字身份证号或生日：</label>
+                <div class="col-sm-4">
+                    <input name="childrenCard" th:field="*{childrenCard}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-4 control-label">兄弟姐妹名字姓名：</label>
+                <div class="col-sm-4">
+                    <input name="brotherName" th:field="*{brotherName}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: bootstrap-fileinput-js"/>
+    <script th:inline="javascript">
+        var prefix = ctx + "application";
+        $("#form-application-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-application-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

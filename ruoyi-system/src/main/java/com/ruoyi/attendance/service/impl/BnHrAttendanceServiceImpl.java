@@ -22,6 +22,7 @@ import com.ruoyi.system.mapper.SysDeptMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.core.text.Convert;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 考勤Service业务层处理
@@ -113,6 +114,7 @@ public class BnHrAttendanceServiceImpl implements IBnHrAttendanceService
      * @param bnHrAttendance 考勤
      * @return 结果
      */
+    @Transactional()
     @Override
     public int updateBnHrAttendance(BnHrAttendance bnHrAttendance)
     {
@@ -159,6 +161,15 @@ public class BnHrAttendanceServiceImpl implements IBnHrAttendanceService
         String day29 = bnHrAttendance.getDay29();
         String day30 = bnHrAttendance.getDay30();
         String day31 = bnHrAttendance.getDay31();
+//        if(StringUtils.isBlank(day29)){
+//            day29 = "0";
+//        }
+//        if(StringUtils.isBlank(day30)){
+//            day30 = "0";
+//        }
+//        if(StringUtils.isBlank(day31)){
+//            day31 = "0";
+//        }
         BigDecimal hours = getBigDecimalSum(new BigDecimal(0), new BigDecimal(nullToZero(day1)), new BigDecimal(nullToZero(day2)), new BigDecimal(nullToZero(day3)), new BigDecimal(nullToZero(day4)),
                 new BigDecimal(nullToZero(day5)), new BigDecimal(nullToZero(day6)), new BigDecimal(nullToZero(day7)), new BigDecimal(nullToZero(day8)), new BigDecimal(nullToZero(day9)),
                 new BigDecimal(nullToZero(day10)), new BigDecimal(nullToZero(day11)), new BigDecimal(nullToZero(day12)), new BigDecimal(nullToZero(day13)), new BigDecimal(nullToZero(day14)),
@@ -178,7 +189,7 @@ public class BnHrAttendanceServiceImpl implements IBnHrAttendanceService
         if(StringUtils.isEmpty(day)){
             day = "0";
         }
-        return day;
+        return day.trim();
     }
 
 //    public static void main(String[] args) {

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.application.mapper.BnHrApplicationMapper">
+    
+    <resultMap type="BnHrApplication" id="BnHrApplicationResult">
+        <result property="id"    column="id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="idCard"    column="id_card"    />
+        <result property="national"    column="national"    />
+        <result property="phone"    column="phone"    />
+        <result property="address"    column="address"    />
+        <result property="nativePlace"    column="native_place"    />
+        <result property="politicalLandscape"    column="political_landscape"    />
+        <result property="accountType"    column="account_type"    />
+        <result property="maritalStatus"    column="marital_status"    />
+        <result property="tel"    column="tel"    />
+        <result property="email"    column="email"    />
+        <result property="mostSchool"    column="most_school"    />
+        <result property="mostDate"    column="most_date"    />
+        <result property="mostPro"    column="most_pro"    />
+        <result property="mostRecord"    column="most_record"    />
+        <result property="firstSchool"    column="first_school"    />
+        <result property="firstDate"    column="first_date"    />
+        <result property="firstPro"    column="first_pro"    />
+        <result property="firstRecord"    column="first_record"    />
+        <result property="personalProfile"    column="personal_profile"    />
+        <result property="referees"    column="referees"    />
+        <result property="secondCard"    column="second_card"    />
+        <result property="secondName"    column="second_name"    />
+        <result property="secondPhone"    column="second_phone"    />
+        <result property="secondUnits"    column="second_units"    />
+        <result property="fatherName"    column="father_name"    />
+        <result property="fatherCard"    column="father_card"    />
+        <result property="motherName"    column="mother_name"    />
+        <result property="motherCard"    column="mother_card"    />
+        <result property="childrenCard"    column="children_card"    />
+        <result property="brotherName"    column="brother_name"    />
+    </resultMap>
+
+    <sql id="selectBnHrApplicationVo">
+        select id, user_name, id_card, national, phone, address, native_place, political_landscape, account_type, marital_status, tel, email, most_school, most_date, most_pro, most_record, first_school, first_date, first_pro, first_record, personal_profile, referees, second_card, second_name, second_phone, second_units, father_name, father_card, mother_name, mother_card, children_card, brother_name from bn_hr_application
+    </sql>
+
+    <select id="selectBnHrApplicationList" parameterType="BnHrApplication" resultMap="BnHrApplicationResult">
+        <include refid="selectBnHrApplicationVo"/>
+        <where>  
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="idCard != null  and idCard != ''"> and id_card like concat('%', #{idCard}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectBnHrApplicationById" parameterType="Long" resultMap="BnHrApplicationResult">
+        <include refid="selectBnHrApplicationVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBnHrApplication" parameterType="BnHrApplication" useGeneratedKeys="true" keyProperty="id">
+        insert into bn_hr_application
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userName != null">user_name,</if>
+            <if test="idCard != null">id_card,</if>
+            <if test="national != null">national,</if>
+            <if test="phone != null">phone,</if>
+            <if test="address != null">address,</if>
+            <if test="nativePlace != null">native_place,</if>
+            <if test="politicalLandscape != null">political_landscape,</if>
+            <if test="accountType != null">account_type,</if>
+            <if test="maritalStatus != null">marital_status,</if>
+            <if test="tel != null">tel,</if>
+            <if test="email != null">email,</if>
+            <if test="mostSchool != null">most_school,</if>
+            <if test="mostDate != null">most_date,</if>
+            <if test="mostPro != null">most_pro,</if>
+            <if test="mostRecord != null">most_record,</if>
+            <if test="firstSchool != null">first_school,</if>
+            <if test="firstDate != null">first_date,</if>
+            <if test="firstPro != null">first_pro,</if>
+            <if test="firstRecord != null">first_record,</if>
+            <if test="personalProfile != null">personal_profile,</if>
+            <if test="referees != null">referees,</if>
+            <if test="secondCard != null">second_card,</if>
+            <if test="secondName != null">second_name,</if>
+            <if test="secondPhone != null">second_phone,</if>
+            <if test="secondUnits != null">second_units,</if>
+            <if test="fatherName != null">father_name,</if>
+            <if test="fatherCard != null">father_card,</if>
+            <if test="motherName != null">mother_name,</if>
+            <if test="motherCard != null">mother_card,</if>
+            <if test="childrenCard != null">children_card,</if>
+            <if test="brotherName != null">brother_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userName != null">#{userName},</if>
+            <if test="idCard != null">#{idCard},</if>
+            <if test="national != null">#{national},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="address != null">#{address},</if>
+            <if test="nativePlace != null">#{nativePlace},</if>
+            <if test="politicalLandscape != null">#{politicalLandscape},</if>
+            <if test="accountType != null">#{accountType},</if>
+            <if test="maritalStatus != null">#{maritalStatus},</if>
+            <if test="tel != null">#{tel},</if>
+            <if test="email != null">#{email},</if>
+            <if test="mostSchool != null">#{mostSchool},</if>
+            <if test="mostDate != null">#{mostDate},</if>
+            <if test="mostPro != null">#{mostPro},</if>
+            <if test="mostRecord != null">#{mostRecord},</if>
+            <if test="firstSchool != null">#{firstSchool},</if>
+            <if test="firstDate != null">#{firstDate},</if>
+            <if test="firstPro != null">#{firstPro},</if>
+            <if test="firstRecord != null">#{firstRecord},</if>
+            <if test="personalProfile != null">#{personalProfile},</if>
+            <if test="referees != null">#{referees},</if>
+            <if test="secondCard != null">#{secondCard},</if>
+            <if test="secondName != null">#{secondName},</if>
+            <if test="secondPhone != null">#{secondPhone},</if>
+            <if test="secondUnits != null">#{secondUnits},</if>
+            <if test="fatherName != null">#{fatherName},</if>
+            <if test="fatherCard != null">#{fatherCard},</if>
+            <if test="motherName != null">#{motherName},</if>
+            <if test="motherCard != null">#{motherCard},</if>
+            <if test="childrenCard != null">#{childrenCard},</if>
+            <if test="brotherName != null">#{brotherName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBnHrApplication" parameterType="BnHrApplication">
+        update bn_hr_application
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="idCard != null">id_card = #{idCard},</if>
+            <if test="national != null">national = #{national},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="nativePlace != null">native_place = #{nativePlace},</if>
+            <if test="politicalLandscape != null">political_landscape = #{politicalLandscape},</if>
+            <if test="accountType != null">account_type = #{accountType},</if>
+            <if test="maritalStatus != null">marital_status = #{maritalStatus},</if>
+            <if test="tel != null">tel = #{tel},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="mostSchool != null">most_school = #{mostSchool},</if>
+            <if test="mostDate != null">most_date = #{mostDate},</if>
+            <if test="mostPro != null">most_pro = #{mostPro},</if>
+            <if test="mostRecord != null">most_record = #{mostRecord},</if>
+            <if test="firstSchool != null">first_school = #{firstSchool},</if>
+            <if test="firstDate != null">first_date = #{firstDate},</if>
+            <if test="firstPro != null">first_pro = #{firstPro},</if>
+            <if test="firstRecord != null">first_record = #{firstRecord},</if>
+            <if test="personalProfile != null">personal_profile = #{personalProfile},</if>
+            <if test="referees != null">referees = #{referees},</if>
+            <if test="secondCard != null">second_card = #{secondCard},</if>
+            <if test="secondName != null">second_name = #{secondName},</if>
+            <if test="secondPhone != null">second_phone = #{secondPhone},</if>
+            <if test="secondUnits != null">second_units = #{secondUnits},</if>
+            <if test="fatherName != null">father_name = #{fatherName},</if>
+            <if test="fatherCard != null">father_card = #{fatherCard},</if>
+            <if test="motherName != null">mother_name = #{motherName},</if>
+            <if test="motherCard != null">mother_card = #{motherCard},</if>
+            <if test="childrenCard != null">children_card = #{childrenCard},</if>
+            <if test="brotherName != null">brother_name = #{brotherName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBnHrApplicationById" parameterType="Long">
+        delete from bn_hr_application where id = #{id}
+    </delete>
+
+    <delete id="deleteBnHrApplicationByIds" parameterType="String">
+        delete from bn_hr_application where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

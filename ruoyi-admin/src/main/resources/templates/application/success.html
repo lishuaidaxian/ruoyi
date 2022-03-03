@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('提交成功')" />
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+    <style>
+        .submit{
+            display: inline;
+            writing-mode: tb-rl;
+            color: #2b64e4;
+            font-size: 5rem;
+            margin-left: 10%;
+            font-weight: bolder;
+        }
+    </style>
+</head>
+<body class="white-bg">
+    <div class="submit" style="display: inline">
+        提交成功
+    </div>
+    <div style="display: inline;">
+        <img style="height: 100%;" src="/img/success.gif">
+    </div>
+</body>
+</html>
